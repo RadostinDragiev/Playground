@@ -3,10 +3,10 @@ services:
   db:
     image: mysql:latest
     ports:
-      - "3306:3306"
+      - "33060:3306"
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--default-authentication-plugin=mysql_native_password']
     environment:
-      - MYSQL_DATABASE=docker_demo
+      - MYSQL_DATABASE=docker_demo_db
       - MYSQL_ROOT_PASSWORD=example
 
   deocker-demo:
