@@ -2,34 +2,47 @@ package com.cloudinary.service;
 
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
+@Service
 public class CloudinaryService {
-    @Value("${CLOUD_NAME}")
-    private String CLOUD_NAME;
 
-    @Value("${API_KEY}")
-    private String API_KEY;
+    private final Cloudinary cloudinary;
 
-    @Value("${API_SECRET}")
-    private String API_SECRET;
-
-    public CloudinaryService() {
+    @Autowired
+    public CloudinaryService(Cloudinary cloudinary) {
+        this.cloudinary = cloudinary;
     }
 
-    public void doSmth() throws IOException {
-        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", CLOUD_NAME,
-                "api_key", API_KEY,
-                "api_secret", API_SECRET));
+    /**
+     * ObjectUtils.asMap
+     * <p>
+     * Define file type
+     * - resource_type -> video /auto/ raw
+     * <p>
+     * Use the uploaded file name
+     * - use_filename -> true / false
+     * <p>
+     * Cloudinary will add random suffix after the file name to make it unique
+     * - unique_filename -> true / false
+     * <p>
+     * Put custom name to the file
+     * - public_id -> (custom)
+     * <p>
+     * Create folder
+     * - folder -> "pets/my_dog"
+     */
+    public void uploadFile() throws IOException {
+        Uploader uploader = this.cloudinary.uploader();
 
-        Map upload = cloudinary.uploader().upload(new File("src/main/resources/files/Olympic_rings_without_rims.svg.png"),
-                ObjectUtils.asMap("public_id", "olympic_flag"));
+        Map upload = uploader.upload("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/2880px-Olympic_rings_without_rims.svg.png", ObjectUtils.emptyMap());
 
-        System.out.println();
+        log.info("File uploaded to URL -> " + upload.get("secure_url"));
     }
 }

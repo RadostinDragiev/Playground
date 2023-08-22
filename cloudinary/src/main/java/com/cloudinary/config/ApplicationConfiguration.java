@@ -1,13 +1,16 @@
 package com.cloudinary.config;
 
-import com.cloudinary.service.CloudinaryService;
+import com.cloudinary.Cloudinary;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfiguration {
     @Bean
-    public CloudinaryService cloudinaryService() {
-        return new CloudinaryService();
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary = new Cloudinary(System.getenv("CLOUDINARY_URL"));
+        cloudinary.config.secure = true;
+
+        return cloudinary;
     }
 }

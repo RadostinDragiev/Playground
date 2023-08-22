@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadProfilePicture() throws IOException {
-        cloudinaryService.doSmth();
+        this.cloudinaryService.uploadFile();
         return ResponseEntity.ok().build();
     }
 }
